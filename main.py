@@ -16,22 +16,29 @@ TIMER = None
 
 
 def reset_timer():
-    window.after_cancel(TIMER)
-    title_label.config(text="Timer")
-    canvas.itemconfig(timer_text, text="00:00")
-    check_marks.config("")
+    start_button.config(state="normal")
+    reset_button.config(state="disabled")
     global REPS
+    window.after_cancel(TIMER)
     REPS = 0
+    canvas.itemconfig(timer_text, text="00:00")
+    title_label.config(text="Timer", fg=GREEN)
+    check_marks.config("")
+
+
 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
+    start_button.config(state="disabled")
+    reset_button.config(state="normal")
     global REPS
     REPS += 1
-
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
+
+    window.attributes('-topmost', 1)
 
     # If it's the 8th rep
     if REPS % 8 == 0:
@@ -45,6 +52,8 @@ def start_timer():
     else:
         count_down(work_sec)
         title_label.config(text="Work")
+
+    window.attributes('-topmost', 0)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def count_down(count):
